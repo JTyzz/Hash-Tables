@@ -17,7 +17,10 @@ class LinkedPair:
 # '''
 class HashTable:
     def __init__(self, capacity):
-        pass
+        self.capacity = capacity
+        self.og_capacity = capacity
+        self.count = 0
+        self.storage = [None] * capacity
 
 
 # '''
