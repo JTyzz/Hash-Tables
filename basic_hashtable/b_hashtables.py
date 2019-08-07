@@ -34,19 +34,10 @@ def hash(string, max):
 # '''
 def hash_table_insert(hash_table, key, value):
     index = hash(key, hash_table.capacity)
-    pair = Pair(key, value)
+    if hash_table.storage[index] is not None:
+        print(f"Warning: over-writing value {hash_table.storage[index]}")
 
-    current_pair = hash_table.storage[index]
-
-    if current_pair is not None and current_pair.key != key:
-        print(f"warning, you will be overwriting {current_pair.key}")
-
-    if current_pair is None:
-        new_pair = Pair(key, value)
-        new_pair.next = hash_table.storage[index]
-        hash_table.storage[index] = new_pair
-    else:
-        current_pair.value = value
+    hash_table.storage[index] = value
 
 
 # If you try to remove a value that isn't there, print a warning.

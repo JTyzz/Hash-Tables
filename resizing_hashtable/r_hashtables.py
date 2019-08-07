@@ -27,7 +27,10 @@ class HashTable:
 # Research and implement the djb2 hash function
 # '''
 def hash(string, max):
-    pass
+    hash = 5381
+    for x in string:
+        hash = ((hash << 5) + hash) + ord(x)
+    return (hash % max) & 0xFFFFFFFF
 
 
 # '''
@@ -36,7 +39,15 @@ def hash(string, max):
 # Hint: Used the LL to handle collisions
 # '''
 def hash_table_insert(hash_table, key, value):
-    pass
+    index = hash(key, hash_table.capacity)
+
+    if hash_table.storage[index] is None:
+        hash_table.storage[index] = LinkedPair(key, value)
+
+    else:
+        new_pair = LinkedPair(key, value)
+        new_pair.next = hash_table.storage[index]
+        hash_table.storage[index] = new_pair
 
 
 # '''
@@ -45,7 +56,19 @@ def hash_table_insert(hash_table, key, value):
 # If you try to remove a value that isn't there, print a warning.
 # '''
 def hash_table_remove(hash_table, key):
-    pass
+    index = hash(key, hash_table.capacity)
+
+    if hash_table.storage[index] is not None:
+        curr = hash_table.storage[index]
+        if curr.key == key:
+            hash_table.storage[index] = curr.next
+        else:
+            while curr is not None:
+                if curr.next.key == key:
+                    curr.next = curr.next.next
+                curr = curr.next
+    else:
+        print(f"no value for key \"{key}\"")
 
 
 # '''
@@ -54,14 +77,32 @@ def hash_table_remove(hash_table, key):
 # Should return None if the key is not found.
 # '''
 def hash_table_retrieve(hash_table, key):
-    pass
+    index = hash(key, hash_table.capacity)
+
+    if hash_table.storage[index] is None:
+        return None
+    else:
+        curr = hash_table.storage[index]
+        if curr.key == key:
+            return curr.value
+        else:
+            while curr is not None:
+                if curr.next.key == key:
+                    return curr.next.value
+                curr = curr.next
+
+            return None
 
 
 # '''
 # Fill this in
 # '''
 def hash_table_resize(hash_table):
-    pass
+    double = [None] * hash_table.capacity
+
+    hash_table.storage = [*hash_table.storage, *double]
+    hash_table.capacity = 2 * hash_table.capacity
+    return hash_table
 
 
 def Testing():
